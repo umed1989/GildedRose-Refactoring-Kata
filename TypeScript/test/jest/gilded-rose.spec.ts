@@ -19,13 +19,13 @@ describe('during updating items', () => {
       expect(items[0].quality).toBe(0);
     });
 
-    // describe('when the SellIn is below 0', () => {
-    //   it('decresing the quality by 2', () => {
-    //     const gildedRose = new GildedRose([new Item('Haunted Shoe', 0, 10)]);
-    //     const items = gildedRose.updateQuality();
-    //     expect(items[0].quality).toBe(8);
-    //   });
-    // });
+    describe('when the SellIn is below 0', () => {
+      it('decresing the quality by 2', () => {
+        const gildedRose = new GildedRose([new Item('Haunted Shoe', 0, 10)]);
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).toBe(8);
+      });
+    });
   });
 
    describe('During Aged Brie updating', () => {
