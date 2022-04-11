@@ -1,11 +1,18 @@
+const Brie = 'Aged Brie';
+const BackstagePass = 'Backstage passes to a TAFKAL80ETC concert';
+const Sulfuras = 'Sulfuras, Hand of Ragnaros';
+const Elixir = 'Elixir of the Mongoose';
+const Conjured = 'Conjured Mana Cake';
+const Shoe = 'Haunted Shoe';
+
 export class Item {
   name: string;
-  sellIn: number;
+  sellin: number;
   quality: number;
 
-  constructor(name, sellIn, quality) {
+  constructor(name, sellin, quality) {
     this.name = name;
-    this.sellIn = sellIn;
+    this.sellin = sellin;
     this.quality = quality;
   }
 }
@@ -17,50 +24,59 @@ export class GildedRose {
     this.items = items;
   }
 
-  updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1
-          }
-        }
+  adjustQuality(item:Item, adjustment: number) {
+    const newQuality : number = item.quality + adjustment;
+    if(newQuality <= 50 && newQuality >=0) {
+      item.quality = newQuality
+    } 
+  }
+
+  handleExpires(item, degradeRate) {
+    if (this.items[item].name != Brie) {
+      if (this.items[item].name != BackstagePass) {
+          this.adjustQuality(this.items[item], degradeRate)
       } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
-              }
-            }
-          }
-        }
+         this.items[item].quality = this.items[item].quality - this.items[item].quality 
       }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
+    } else {
+        this.adjustQuality(this.items[item], + 1)
+    }
+  }
+
+  // adjustSellin(item: Item) { 
+  //    let adjustment: number = item.name == BackstagePass ? 2 : 1
+
+  //   if(item.sellin < 11 && item.sellin < 6) {
+  //     this.adjustQuality(item, adjustment)
+  //   } 
+  // }
+
+  updateQuality() {
+    
+    for (let item = 0; item < this.items.length; item++) {
+      let degradeRate: number  = this.items[item].name == Conjured ? -2 : -1
+      let degrades: boolean =  this.items[item].name != Brie && this.items[item].name != BackstagePass && this.items[item].name != Sulfuras  
+      
+      if(degrades) {
+        this.adjustQuality(this.items[item], degradeRate)
       }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1
-              }
-            }
-          } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality
-          }
-        } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1
-          }
-        }
+
+      if(this.items[item].name == Brie) {
+        this.adjustQuality(this.items[item], 1);
+      } 
+        
+        if (this.items[item].name == BackstagePass) {
+          this.adjustQuality(this.items[item], 1);
+          this.items[item].sellin < 11 ? this.adjustQuality(this.items[item], 1) : null
+          this.items[item].sellin < 6 ? this.adjustQuality(this.items[item], 1) : null  
+        }       
+      
+      if (this.items[item].name != Sulfuras) {
+        this.items[item].sellin -= 1 
+      }
+      
+      if (this.items[item].sellin < 0) {
+        this.handleExpires(item, degradeRate)
       }
     }
 
