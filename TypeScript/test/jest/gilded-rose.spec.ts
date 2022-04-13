@@ -86,8 +86,4 @@ describe('during updating items', () => {
     });
   });
 
-  describe('when updating a Conjured item', () => {
-    it.skip("always reduces quality by 2", () =>  {
-
-    });
-  });
+ 

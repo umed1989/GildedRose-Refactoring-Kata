@@ -31,7 +31,7 @@ export class GildedRose {
     } 
   }
 
-  handleExpires(item, degradeRate, degrades) {
+  handleExpired(item, degradeRate) {
     if (this.items[item].name != Brie) {
       if (this.items[item].name != BackstagePass) {
           this.adjustQuality(this.items[item], degradeRate)
@@ -41,7 +41,7 @@ export class GildedRose {
     } else {
         this.adjustQuality(this.items[item], 1)
     }
-
+    
   }
 
   updateQuality() {
@@ -58,9 +58,9 @@ export class GildedRose {
       } 
 
       this.items[item].name != Sulfuras ? this.items[item].sellin -= 1 : null;  
-      this.items[item].sellin < 0 ? this.handleExpires(item, degradeRate, degrades) : null;  
+      this.items[item].sellin < 0 ? this.handleExpired(item, degradeRate) : null;  
     }
-
+    
     return this.items;
   }
 }
